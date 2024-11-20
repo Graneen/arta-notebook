@@ -1,4 +1,4 @@
-
+import styles from '../styles/Home.module.css';
 import { createNote, deleteNote } from '../api';
 import { Note } from '../page';
 
@@ -32,20 +32,22 @@ export default function NoteForm({ notes, setNotes, text, selectedNote, setSelec
     }
 
     return (
-        <>
+        <div className={styles.grid}>
             <form onSubmit={handleSubmit}>
-                <textarea rows="4" cols="50"
+                <textarea className={styles.area} rows="4" cols="50"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Enter your note here..."
                 ></textarea>
-                <button type="submit">Save</button>
+                <div className={styles.button_flex}>
+                    {selectedNote ? (
+                        <button className={styles.button} type="button" onClick={() => deleteHandler(selectedNote)}>Delete</button>
+                    ) : (
+                        ''
+                    )}
+                    <button className={styles.button} type="submit">Save</button>
+                </div>
             </form>
-            {selectedNote ? (
-                <button onClick={() => deleteHandler(selectedNote)}>Delete</button>
-            ) : (
-                ''
-            )}
-        </>
+        </div>
     );
 }
