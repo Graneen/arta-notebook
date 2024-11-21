@@ -44,7 +44,7 @@ router.delete("/api/notes/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await Post.destroy({where: { id: Number(id) }});
-    return res.status(209); 
+    return res.json(id); 
   } catch (error) {
     console.log("ERROR WHILE ADD POST: ", error);
     res.status(500).json({ message: "Error while add post" });

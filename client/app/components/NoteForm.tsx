@@ -1,51 +1,50 @@
-import styles from '../styles/Home.module.css';
-import { createNote, deleteNote } from '../api';
-import { Note } from '../page';
+import styles from '../../app/styles/Home.module.css';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addNote, removeNote, setText } from '../../redux/features/notesSlice';
 
 
-export default function NoteForm({ notes, setNotes, text, selectedNote, setSelectedNote, setText, toggle, setToggle }) {
-
+export default function NoteForm() {
+    const dispatch = useAppDispatch();
+    const { notes, selectedNote, text } = useAppSelector((state) => state.notes);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-
         try {
-            const newNote = await createNote(text);
-            setText('');
-            setNotes([...notes, newNote]);
-            setToggle(!toggle);
+            if (text.split('').length <= 200) {
+                dispatch(addNote(text));
+            }
+            else alert('Давай короче, до 200 символов!');
         } catch (error) {
-            console.error('Error while try to create new note:', error);
+            console.log("Ошибка при попытке добавить новую заметку", error);
         }
-    };
+    }
 
-    async function deleteHandler(note: Note) {
+    async function deleteHandler() {
         try {
-            setNotes(notes.filter((item: Note) => item.id !== note.id));
-            setText('');
-            await deleteNote(note.id);
-            setSelectedNote(null);
-            setToggle(!toggle);
+            if (text === selectedNote.text) {
+                await dispatch(removeNote(Number(selectedNote.id)));
+            }
         } catch (error) {
-            console.error('Error while try to delete note:', error);
+            console.log("Ошибка при попытке удалить заметку", error);
         }
     }
 
     return (
         <div className={styles.grid}>
             <form onSubmit={handleSubmit}>
-                <textarea className={styles.area} rows="4" cols="50"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Enter your note here..."
+                <textarea
+                    className={styles.area}
+                    rows="4"
+                    cols="50"
+                    value={text ?? ''}
+                    onChange={(e) => dispatch(setText(e.target.value))}
+                    placeholder="Текст заметки"
                 ></textarea>
                 <div className={styles.button_flex}>
-                    {selectedNote ? (
-                        <button className={styles.button} type="button" onClick={() => deleteHandler(selectedNote)}>Delete</button>
-                    ) : (
-                        ''
+                    <button className={styles.button} type="submit">Сохранить</button>
+                    {selectedNote && (
+                        <button className={styles.button} type="button" onClick={deleteHandler}>Удалить</button>
                     )}
-                    <button className={styles.button} type="submit">Save</button>
                 </div>
             </form>
         </div>
