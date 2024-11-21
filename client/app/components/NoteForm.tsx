@@ -1,4 +1,4 @@
-import styles from '../../app/styles/Home.module.css';
+import styles from '../../app/styles/Home.module.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addNote, removeNote, setText } from '../../redux/features/notesSlice';
 

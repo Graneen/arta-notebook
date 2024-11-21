@@ -1,0 +1,89 @@
+$container-padding: 0.5rem;
+$main-padding: 5rem;
+$title-font-size: 4rem;
+$card-border-radius: 10px;
+$box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+$area-bg-color: #f9f9fa;
+
+.container {
+  min-height: 100vh;
+  padding: 0 $container-padding;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  padding: $main-padding 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+  margin: auto;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: $title-font-size;
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+}
+
+.card {
+  border-radius: $card-border-radius;
+  box-shadow: $box-shadow;
+  padding: 10px;
+}
+
+.area {
+  border-radius: $card-border-radius;
+  background-color: $area-bg-color;
+  box-shadow: $box-shadow;
+  padding: 10px;
+  margin: 10px;
+}
+
+.note {
+  border-radius: $card-border-radius;
+  background-color: bisque;
+  box-shadow: $box-shadow;
+  padding: 10px;
+  margin: 10px;
+}
+
+.button_flex {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-direction: row;
+
+  .button {
+    background-color: $area-bg-color;
+    border-radius: 10px;
+    box-shadow: $box-shadow;
+    padding: 10px;
+    margin: 10px;
+  }
+}
+
+.button_paginate {
+  background-color: $area-bg-color;
+  border-radius: $card-border-radius;
+  box-shadow: $box-shadow;
+  padding: 5px;
+  margin: 10px;
+}
+
+.button_paginate_active {
+  background-color: #b3b3b3;
+  border-radius: 10px;
+  box-shadow: $box-shadow;
+  padding: 5px;
+  margin: 10px;
+}
