@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllNotes, createNote, deleteNote } from '../../app/api'; 
+import { getAllNotes, createNote, updateNote, deleteNote } from '../../app/api/api'; 
 
 
 export interface Note {
   id: number;
   text: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface NotesState {
   notes: Note[];
   selectedNote: Note | null;
-  text: string | undefined;
+  text: string;
   isLoading: boolean;
   error: string | null;
 }
@@ -24,10 +26,11 @@ const initialState: NotesState = {
 };
 
 export const fetchNotes = createAsyncThunk(
-  'notes/fetch',
+  'notes/all',
   async () => {
     const response = await getAllNotes();
-    return response.dataPosts;
+    console.log(response)
+    return response;
   }
 );
 
@@ -47,6 +50,18 @@ export const removeNote = createAsyncThunk(
   }
 );
 
+export const updNote = createAsyncThunk(
+  'notes/update/:id',
+  async ({ id, text }: { id: number, text: string }) => {
+    const response = await updateNote(id, text);
+    return response;
+  }
+);
+export const selectNote = (note: Note) => ({
+  type: 'notes/selectNote',
+  payload: note,
+});
+
 const notesSlice = createSlice({
   name: 'notes',
   initialState,
@@ -64,12 +79,12 @@ const notesSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(fetchNotes.rejected, (state, action) => {
-      state.error = action.error.message || 'Что-то не так...';
+      state.error = action.error.message || 'Что-то не так в слайсе...';
       state.isLoading = false;
     });
     builder.addCase(addNote.fulfilled, (state, action) => {
       state.notes.push(action.payload);
-      state.selectedNote = action.payload;
+      state.selectedNote = null;
       state.text = '';
     });
     builder.addCase(removeNote.fulfilled, (state, action) => {
@@ -77,17 +92,21 @@ const notesSlice = createSlice({
       state.selectedNote = null;
       state.text = '';
     });
-    builder.addCase(selectNote(undefined), (state, action) => {
+    builder.addCase(selectNote(null), (state, action) => {
       state.selectedNote = action.payload;
-      state.text = action.payload?.text;
+      state.text = action.payload.text;
+    });
+    builder.addCase(updNote.fulfilled, (state, action) => {
+      const existingIndex = state.notes.findIndex((note) => note.id === action.payload.id);
+      if (existingIndex >= 0) {
+        state.notes[existingIndex] = action.payload;
+        state.selectedNote = null;
+        state.text = '';
+      }
     });
   },
 });
 
 export const { setText } = notesSlice.actions;
-export const selectNote = (note: Note) => ({
-  type: 'notes/selectNote',
-  payload: note,
-});
 
 export default notesSlice.reducer;

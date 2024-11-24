@@ -1,27 +1,34 @@
-import styles from '../../app/styles/Home.module.scss';
+'use client';
+
+import styles from '../styles/Home.module.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { addNote, removeNote, setText } from '../../redux/features/notesSlice';
+import { addNote, removeNote, updNote, setText } from '../../redux/features/notesSlice';
 
 
 export default function NoteForm() {
     const dispatch = useAppDispatch();
-    const { notes, selectedNote, text } = useAppSelector((state) => state.notes);
+    const { selectedNote, text } = useAppSelector((state) => state.notes);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         try {
-            if (text.split('').length <= 200) {
-                dispatch(addNote(text));
+            if (text.split('').length <= 200 && 2 < text.split('').length) {
+                if (selectedNote !== null) {
+                    await dispatch(updNote({ id: selectedNote.id, text }));
+                } else {
+                    await dispatch(addNote(text));
+                }
+            } else {
+                alert('Давай уложим длину текста в диапазон от 3 до 200 символов!');
             }
-            else alert('Давай короче, до 200 символов!');
         } catch (error) {
-            console.log("Ошибка при попытке добавить новую заметку", error);
+            console.log('Ошибка при попытке добавить новую заметку', error);
         }
     }
 
     async function deleteHandler() {
         try {
-            if (text === selectedNote.text) {
+            if (text === selectedNote?.text) {
                 await dispatch(removeNote(Number(selectedNote.id)));
             }
         } catch (error) {

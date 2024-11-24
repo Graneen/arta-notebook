@@ -1,17 +1,17 @@
-"use client"
+import React from 'react';
+import styles from '../app/styles/Home.module.scss';
+import SPA from './components/SPA';
 
 
-import type { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
-import Home from './components/Home';
-
-function MyApp({ pageProps }: AppProps) {
+export default function New() {
   return (
-    <Provider store={store}>
-      <Home {...pageProps} />
-    </Provider>
+    <>
+      <div className={styles.container}>
+      <h1>Записная книжка на NEXT.js + MySQL</h1>
+        <div className={styles.grid}>
+        <SPA/>
+        </div>
+      </div>
+    </>
   );
 }
-
-export default MyApp;
