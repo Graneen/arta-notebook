@@ -52,11 +52,20 @@ $area-bg-color: #f9f9fa;
 }
 
 .note {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-direction: row;
   border-radius: $card-border-radius;
   background-color: bisque;
   box-shadow: $box-shadow;
   padding: 10px;
   margin: 10px;
+
+  span {
+    color: #b3b3b3;
+    font-size: small;
+  }
 }
 
 .button_flex {

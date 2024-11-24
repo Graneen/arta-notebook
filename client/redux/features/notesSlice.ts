@@ -29,7 +29,6 @@ export const fetchNotes = createAsyncThunk(
   'notes/all',
   async () => {
     const response = await getAllNotes();
-    console.log(response)
     return response;
   }
 );
