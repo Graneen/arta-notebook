@@ -13,14 +13,12 @@ npm install --force
 
 ##  Серверная часть и база данных
 
-Прежде всего создайте .env файл по примеру .env.example, заполните его осмысленной информацией, убедитесь, что у вас установлено ПО для работы СУБД MySQL. 
+Прежде всего убедитесь, что у вас установлено ПО для работы СУБД MySQL. 
 Для установки зависимостей и инициалзации БД, ее наполнения миграциями при помощи Prisma, ввести следующие команды в терминале папки client:
 
 ```
-mysql -u root -p
-CREATE DATABASE notebook_db;
-exit;
-npx prisma migrate dev --name add_posts_table
+npx prisma init --datasource-provider mysql
+npx prisma migrate dev --name posts     
 
 ```
 Для запуска приложения введите следующую команду в терминале:
