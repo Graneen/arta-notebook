@@ -1,23 +1,30 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '../styles/Home.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchNotes, Note, selectNote } from '@/redux/features/notesSlice';
 
-export default function Plans() {
-
+export default function Posts() {
   const dispatch = useAppDispatch();
   const { notes, isLoading, selectedNote } = useAppSelector(state => state.notes);
   const [currentPage, setCurrentPage] = useState(1);
+  const mountedRef = useRef(false); 
 
   const indexOfLastNote = currentPage * 5;
   const indexOfFirstNote = indexOfLastNote - 5;
   const currentNotes = notes?.slice(indexOfFirstNote, indexOfLastNote);
 
   useEffect(() => {
+    mountedRef.current = true; 
+
+    if (!mountedRef.current) return; 
+
     if (!isLoading && !notes.length) {
-      dispatch(fetchNotes());
+      dispatch(fetchNotes()); 
     }
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, [dispatch, isLoading, notes]);
 
   function selectorHandler(note: Note) {

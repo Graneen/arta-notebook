@@ -40,9 +40,8 @@ export default function NoteForm() {
         <div className={styles.grid}>
             <form onSubmit={handleSubmit}>
                 <textarea
+                    id={'1'}
                     className={styles.area}
-                    rows="4"
-                    cols="50"
                     value={text ?? ''}
                     onChange={(e) => dispatch(setText(e.target.value))}
                     placeholder="Текст заметки"

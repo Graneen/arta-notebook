@@ -8,16 +8,14 @@ import styles from '../../app/styles/Home.module.scss';
 function SPA() {
     return (
         <>
-            <div className={styles.card}>
-                <Provider store={store}>
+            <Provider store={store}>
+                <div className={styles.card}>
                     <Posts />
-                </Provider>
-            </div>
-            <div className={styles.card}>
-                <Provider store={store}>
+                </div>
+                <div className={styles.card}>
                     <NoteForm />
-                </Provider>
-            </div>
+                </div>
+            </Provider>
         </>
     );
 }
