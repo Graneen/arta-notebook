@@ -1,30 +1,35 @@
 import prisma from '@/app/lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export interface Post {
   id: number;
   text: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const posts = (await prisma.posts.findMany({
+    const userId = Number(req.headers.get('x-user-id'));
+    
+    const posts = await prisma.posts.findMany({
+      where: {
+        userId
+      },
       select: {
         id: true,
         text: true,
         createdAt: true,
         updatedAt: true,
       },
-    })) as Post[];
+    });
 
     return NextResponse.json(posts);
   } catch (error) {
     console.error('Ошибка при получении списка заметок:', error);
     return NextResponse.json(
-      { error: 'Ошибка при получении списка заметок: ' + error },
-      { status: 500 },
+      { error: 'Ошибка при получении списка заметок' },
+      { status: 500 }
     );
   }
-
 }

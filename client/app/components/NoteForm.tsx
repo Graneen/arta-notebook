@@ -2,8 +2,7 @@
 
 import styles from '../styles/Home.module.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { addNote, removeNote, updNote, setText } from '../../redux/features/notesSlice';
-
+import { addNote, removeNote, updNote, setText, createNote } from '../../redux/features/notesSlice';
 
 export default function NoteForm() {
     const dispatch = useAppDispatch();
@@ -14,9 +13,16 @@ export default function NoteForm() {
         try {
             if (text.split('').length <= 200 && 2 < text.split('').length) {
                 if (selectedNote !== null) {
-                    await dispatch(updNote({ id: selectedNote.id, text }));
+                    await dispatch(updNote({
+                        id: selectedNote.id,
+                        title: '',
+                        content: '',
+                        text: text,
+                        createdAt: selectedNote.createdAt
+                    }));
                 } else {
-                    await dispatch(addNote(text));
+                    await dispatch(createNote(text)).unwrap();
+                    dispatch(setText(''));
                 }
             } else {
                 alert('Давай уложим длину текста в диапазон от 3 до 200 символов!');
@@ -29,7 +35,7 @@ export default function NoteForm() {
     async function deleteHandler() {
         try {
             if (text === selectedNote?.text) {
-                await dispatch(removeNote(Number(selectedNote.id)));
+                await dispatch(removeNote(selectedNote.id));
             }
         } catch (error) {
             console.log("Ошибка при попытке удалить заметку", error);

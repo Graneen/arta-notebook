@@ -7,7 +7,7 @@ export default function New() {
   return (
     <>
       <div className={styles.container}>
-      <h1>Записная книжка на NEXT.js + MySQL</h1>
+      <h1>Записная книжка на NEXT.js</h1>
         <div className={styles.grid}>
         <SPA/>
         </div>

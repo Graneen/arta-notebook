@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styles from '../styles/Home.module.scss';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchNotes, Note, selectNote } from '@/redux/features/notesSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { fetchNotes, Note, selectNote } from '../../redux/features/notesSlice';
+import LoadingSpinner from './common/LoadingSpinner';
 
 export default function Posts() {
   const dispatch = useAppDispatch();
@@ -14,22 +15,23 @@ export default function Posts() {
   const currentNotes = notes?.slice(indexOfFirstNote, indexOfLastNote);
 
   useEffect(() => {
-    mountedRef.current = true; 
-
-    if (!mountedRef.current) return; 
-
-    if (!isLoading && !notes.length) {
-      dispatch(fetchNotes()); 
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      dispatch(fetchNotes());
     }
 
     return () => {
       mountedRef.current = false;
     };
-  }, [dispatch, isLoading, notes]);
+  }, [dispatch]);
 
-  function selectorHandler(note: Note) {
-    dispatch(selectNote(note));
+  function selectorHandler(noteObject: Note) {
+    dispatch(selectNote(noteObject));
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
